@@ -1,14 +1,17 @@
 from sklearn.model_selection import KFold,StratifiedKFold
 from sklearn.metrics import f1_score,accuracy_score,precision_score,recall_score,fbeta_score
 from sklearn.metrics import mean_absolute_error, mean_squared_error,r2_score
+import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 class Cross_valid_clf():
   """ 
     This class does cross validation for general classifiers. 
         model: Sklearn model or customized model with fit and predict methods;
-        X: features
-        y:target
+        X: array with values for features
+        y:array with values for target
         folds: Number of folds;
         metrics : accuracy,f1score, precision,recall,fbeta score;
         stratified: Use stratified Kfold to keep the ratio of classes in all folds;
@@ -191,3 +194,33 @@ class Cross_valid_reg():
             print(f'R2 Mean: {np.mean(mae)}   Std: {np.std(mae)}')
         return np.mean(mae)  
     #precision score
+
+def feature_importance_plot(algorithm,X_train,y_train,of_type):
+    
+    if of_type == "coef":
+        algorithm.fit(X_train,y_train)
+        coef = pd.DataFrame(algorithm.coef_.ravel())
+        coef["coef"] = X_train.columns
+        plt.figure(figsize=(14,4))
+        ax1 = sns.barplot(coef["coef"],coef[0],palette="jet_r",
+                          linewidth=2,edgecolor="k"*coef["coef"].nunique())
+        #ax1.set_facecolor("lightgrey")
+        ax1.axhline(0,color="k",linewidth=2)
+        plt.ylabel("coefficients")
+        plt.xlabel("features")
+        plt.xticks(rotation='vertical')
+        plt.title('FEATURE IMPORTANCES')
+    
+    elif of_type == "feat":
+        algorithm.fit(X_train,y_train)
+        coef = pd.DataFrame(algorithm.feature_importances_)
+        coef["feat"] = X_train.columns
+        plt.figure(figsize=(14,4))
+        ax2 = sns.barplot(coef["feat"],coef[0],palette="jet_r",
+                          linewidth=2,edgecolor="k"*coef["feat"].nunique())
+        #ax2.set_facecolor("lightgrey")
+        ax2.axhline(0,color="k",linewidth=2)
+        plt.ylabel("coefficients")
+        plt.xlabel("features")
+        plt.xticks(rotation='vertical')
+        plt.title('FEATURE IMPORTANCES')
