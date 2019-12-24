@@ -1,6 +1,6 @@
 from sklearn.model_selection import KFold,StratifiedKFold
 from sklearn.metrics import f1_score,accuracy_score,precision_score,recall_score,fbeta_score
-from sklearn.metrics import mean_absolute_error, mean_squared_error
+from sklearn.metrics import mean_absolute_error, mean_squared_error,r2_score
 import numpy as np
 
 class Cross_valid_clf():
@@ -174,4 +174,20 @@ class Cross_valid_reg():
             print(f'\n Overall MAE:')
             print(f'MAE Mean: {np.mean(mae)}   Std: {np.std(mae)}')
         return np.mean(mae)
+  def r2(self, reg,verbose=True):
+        mae = []
+        i=0
+        for tr, te in self.kf.split(self.X,self.y):
+            reg.fit(self.X[tr],self.y[tr])
+            y_pred=reg.predict(self.X[te])
+            mae.append(r2_score(y_pred,self.y[te]))
+            if verbose:
+                print('-'*30)
+                print(f'\nFold {i+1} out of {self.n_splits}')
+                print(f'R2: {mae[i]}')
+            i+=1
+        if verbose:
+            print(f'\n Overall R2:')
+            print(f'R2 Mean: {np.mean(mae)}   Std: {np.std(mae)}')
+        return np.mean(mae)  
     #precision score
