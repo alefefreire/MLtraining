@@ -175,4 +175,3 @@ class Cross_valid_reg():
             print(f'MAE Mean: {np.mean(mae)}   Std: {np.std(mae)}')
         return np.mean(mae)
     #precision score
-  
