@@ -8,7 +8,7 @@ class Cross_valid_clf():
     self.n_splits = n_splits
     self.X = X
     self.y = y
-    
+        
     if stratified:
         self.kf=StratifiedKFold(self.n_splits,shuffle=False,random_state=0)
         self.kf.get_n_splits(self.X)
@@ -38,7 +38,8 @@ class Cross_valid_clf():
         i=0
         for tr, te in self.kf.split(self.X,self.y):
             clf.fit(self.X[tr],self.y[tr])
-            f1score.append(f1_score(self.X[te],self.y[te]))
+            y_pred=clf.predict(self.X[te])
+            f1score.append(f1_score(y_pred,self.y[te]))
             if verbose:
                 print('-'*30)
                 print(f'\nFold {i+1} out of {self.n_splits}')
@@ -54,7 +55,8 @@ class Cross_valid_clf():
         i=0
         for tr, te in self.kf.split(self.X,self.y):
             clf.fit(self.X[tr],self.y[tr])
-            prec_score.append(precision_score(self.X[te],self.y[te]))
+            y_pred=clf.predict(self.X[te])
+            prec_score.append(precision_score(y_pred,self.y[te]))
             if verbose:
                 print('-'*30)
                 print(f'\nFold {i+1} out of {self.n_splits}')
@@ -70,6 +72,7 @@ class Cross_valid_clf():
         i=0
         for tr, te in self.kf.split(self.X,self.y):
             clf.fit(self.X[tr],self.y[tr])
+            y_pred=clf.predict(y_pred,self.X[te])
             rec_score.append(recall_score(self.X[te],self.y[te]))
             if verbose:
                 print('-'*30)
@@ -86,7 +89,8 @@ class Cross_valid_clf():
         i=0
         for tr, te in self.kf.split(self.X,self.y):
             clf.fit(self.X[tr],self.y[tr])
-            fbetascore.append(fbeta_score(self.X[te],self.y[te],beta))
+            y_pred=clf.predict(self.X[te])
+            fbetascore.append(fbeta_score(y_pred,self.y[te],beta))
             if verbose:
                 print('-'*30)
                 print(f'\nFold {i+1} out of {self.n_splits}')
