@@ -196,7 +196,20 @@ class Cross_valid_reg():
     #precision score
 
 def feature_importance_plot(algorithm,X_train,y_train,of_type):
-    
+    """This function does the feature importance for any classifiers or regressors.
+
+    Parameters
+    ----------------
+    algorithm: Algorithm which one wants to importance the relevant features
+    X_train: axis x of the train dataframe
+    y_train: axis y of the target dataframe
+    of_type: 'coef' or 'feat', depending on the algorithm.
+
+    Return
+    -----------------
+    Plot with feature importances
+
+    """
     if of_type == "coef":
         algorithm.fit(X_train,y_train)
         coef = pd.DataFrame(algorithm.coef_.ravel())
