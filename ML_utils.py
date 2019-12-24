@@ -147,7 +147,7 @@ class Cross_valid_reg():
         for tr, te in self.kf.split(self.X,self.y):
             reg.fit(self.X[tr],self.y[tr])
             y_pred=reg.predict(self.X[te])
-            rmse.append(np.sqrt(mean_squared_error(y_pred,self.y[te])))
+            rmse.append(mean_squared_error(y_pred,self.y[te]))
             if verbose:
                 print('-'*30)
                 print(f'\nFold {i+1} out of {self.n_splits}')
